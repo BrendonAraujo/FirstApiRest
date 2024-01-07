@@ -19,6 +19,8 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet()]
+    [ProducesResponseType(typeof(IEnumerable<WeatherForecast>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult<IEnumerable<WeatherForecast>> Get()
     {
         if (Summaries.Length == 0)
