@@ -5,12 +5,11 @@ namespace FirstRestAPI.Config;
 
 public static class DBContextConfig
 {
-    public static IServiceCollection AddDBContextConfig(this IServiceCollection serivces)
+    public static WebApplicationBuilder AddDBContextConfig(this WebApplicationBuilder builder)
     {
-        var connectionString = "";
-        serivces.AddDbContext<ApiDbContext>(options =>
-            options.
-            UseSqlServer(connectionString));
-        return serivces;
+        builder.Services.AddDbContext<ApiDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+        );
+        return builder;
     }
 }

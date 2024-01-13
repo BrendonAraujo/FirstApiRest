@@ -1,19 +1,31 @@
-﻿using FirstRestAPI.Models;
+﻿using AutoMapper;
+using Business.Interfaces;
+using FirstRestAPI.Models;
+using FirstRestAPI.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace FirstRestAPI.Controllers;
 
-[ApiController]
-[Route("api/supplier")]
-public class SupplierController : ControllerBase
+[Route("api/[controller]")]
+public class SupplierController : MainController
 {
+    private readonly ISupplierRepository _supplierRepository;
+    private readonly IMapper _mapper;
+    public SupplierController(ISupplierRepository supplierRepository, IMapper mapper)
+    {
+        _supplierRepository = supplierRepository;
+        _mapper = mapper;
+    }
+
     [HttpGet()]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-    public ActionResult<IEnumerable<Supplier>> GetAllSupplier()
+    public async Task<ActionResult<IEnumerable<SupplierViewModel>>> GetAllSupplier()
     {
-        return Ok();
+        var suppliers = await _supplierRepository.Get();
+        var supplierViewModel = _mapper.Map<IEnumerable<SupplierViewModel>>(suppliers);
+        return Ok(supplierViewModel);
     }
 
     [HttpGet("{id:int}")]
@@ -30,7 +42,7 @@ public class SupplierController : ControllerBase
 
     [HttpPost()]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-    public ActionResult<Supplier> Create(Supplier supplier)
+    public ActionResult<Supplier> CreateSupplier(Supplier supplier)
     {
         if (!ModelState.IsValid)
         {
@@ -42,7 +54,7 @@ public class SupplierController : ControllerBase
 
     [HttpPut("{id:Guid}")]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
-    public ActionResult<IEnumerable<Supplier>> Update(Guid id, Supplier supplier)
+    public ActionResult<IEnumerable<Supplier>> UpdateSupplier(Guid id, Supplier supplier)
     {
         if (!ModelState.IsValid)
         {
@@ -60,7 +72,7 @@ public class SupplierController : ControllerBase
 
     [HttpDelete("{id:int}")]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
-    public ActionResult Delete(Guid id) 
+    public ActionResult DeleteSupplier(Guid id) 
     {
         return NoContent();
     }
