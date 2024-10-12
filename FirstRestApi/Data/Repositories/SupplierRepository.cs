@@ -1,7 +1,7 @@
 ﻿using Business.Interfaces;
 using FirstRestAPI.Context;
 using FirstRestAPI.Models;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
